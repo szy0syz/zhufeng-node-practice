@@ -14,7 +14,11 @@ function Child() {
   this.name = 'Chind';
 }
 
-// 第一种继承：原型继承
-Child.prototype = new Parent;
+//原型继承
+// Child.prototype = new Parent;
+// 其实node的util也给我们封装了一个继承方法
+var util = require('util');
+util.inherits(Child, Parent);
 var child = new Child();
 child.showName(); 
+console.log(child.__proto__.__proto__.__proto__ === Object.prototype);
