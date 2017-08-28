@@ -57,3 +57,6 @@ typings/
 # dotenv environment variables file
 .env
 
+.idea/
+.idea/vcs.xml
+.iead/watcherTasks.xml
