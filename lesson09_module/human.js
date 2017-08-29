@@ -23,6 +23,8 @@ Person.prototype.setName = function(age) {
 
 Person.prototype.home = "中国";
 
+console.log('加载Person模块');
+
 // exports = Person;
 // 在导出引用类型对象时，还必须使用module.exports来导出！
 module.exports = Person;
