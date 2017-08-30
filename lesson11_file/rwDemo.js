@@ -13,8 +13,8 @@ setTimeout(function () {
   })
 }, 3000);
 
-process.stdin.on('data', function (err, data) {
-  console.log(arguments);
-});
+// process.stdin.on('data', function (err, data) {
+//   console.log(arguments);
+// });
 
 setInterval(function () { }, 1000);
