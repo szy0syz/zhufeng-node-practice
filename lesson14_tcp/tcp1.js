@@ -20,3 +20,7 @@ server.on('error', function(err) {
 server.listen(8088, function() {
   console.log(util.inspect(server.address()));
 });
+
+server.on('close', function() {
+  console.log('server is closed...');
+});
