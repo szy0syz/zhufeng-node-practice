@@ -1,4 +1,4 @@
-/**
+/** TCP简版聊天室
  * 1. 创建这么一个服务端：
  * 2. 客户端可以连接服务端
  * 3. 客户端可以发言，然后广播给大家
@@ -12,7 +12,10 @@ var clients = {};
 var server = net.createServer(function (socket) {
   var nickname;
   socket.setEncoding('utf8');
-  socket.write('欢迎光临，请输入用户名：\r\n> ');
+  server.getConnections(function (err, count) {
+    socket.write('欢迎光临，当前共在线' + count + '，请输入用户名：\r\n> ');
+  });
+
   socket.on('data', function (data) {
     data = data.replace(/\r\n/, '');
     if (nickname) {
@@ -23,6 +26,28 @@ var server = net.createServer(function (socket) {
       broadcast(nickname, '[系统广播]' + nickname + '加入了聊天室! ');
     }
   });
+
+  socket.on('end', function (data) {
+    console.log('client is end...');
+    broadcast(nickname, '[系统广播]' + nickname + '离开了聊天室! ');
+    if (clients[nickname]) {
+      clients[nickname].destroy();
+      delete clients[nickname];
+    }
+  });
+
+  socket.on('error', function (err) {
+    console.log(err);
+  });
+
+  socket.on('close', function () {
+    console.log('client is closed...');
+    if (clients[nickname]) {
+      clients[nickname].destroy();
+      delete clients[nickname];
+    }
+  });
+
 });
 
 function broadcast(nickname, msg) {
