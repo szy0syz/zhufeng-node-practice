@@ -1,9 +1,10 @@
+var querystring = require('querystring');
 var http = require('http');
 var options = {
   hostname: '127.0.0.1',
   port: 8080,
   headers: {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/x-www-form-urlencoded'
   },
   path: '/',
   method: 'POST'
@@ -20,5 +21,5 @@ var req = http.request(options, function (res) {
   })
 });
 
-req.write(JSON.stringify({ name: 'jerry', age: '18' }));
+req.write(querystring.stringify({ name: 'jerry', age: '18' }));
 req.end();
