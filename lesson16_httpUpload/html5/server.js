@@ -1,6 +1,7 @@
 var querystring = require('querystring');
 var http = require('http');
 var util = require('util');
+var formidable = require('formidable');
 // var mine = require('mine');
 var url = require('url');
 var fs = require('fs');
@@ -11,9 +12,17 @@ var app = http.createServer(function(req, res) {
   if(pathname === '/') {
     fs.createReadStream('./index.html').pipe(res);
   } else if (pathname === '/post') {
-    res.end('post');
+    var parse = new formidable.incomingForm();
+    parse.parse(req, function(err, fields, files) {
+      if(err) {
+
+      }
+      
+    })
   } else {
     res.end('404');
   }
 
-}).listen(8088);
+}).listen(8088, function() {
+  console.log('server is running...');
+});
