@@ -12,12 +12,13 @@ var app = http.createServer(function(req, res) {
   if(pathname === '/') {
     fs.createReadStream('./index.html').pipe(res);
   } else if (pathname === '/post') {
-    var parse = new formidable.incomingForm();
+    var parse = new formidable.IncomingForm();
     parse.parse(req, function(err, fields, files) {
       if(err) {
-
+        res.end('file error');
       }
-      
+      console.log(files);
+      res.end('file ok');
     })
   } else {
     res.end('404');

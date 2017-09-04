@@ -68,8 +68,14 @@
         xhr.addEventListener('load', success, false); //上传成功
         xhr.addEventListener('error', error, false); //上传出错
         xhr.addEventListener('abort', abort, false); //上传中断
+        xhr.onreadystatechange = function() {
+            // 不仅判断xhr.status==2xx还要判断xhr.readyState==4，否则响应头也是200啊
+            if(/^2\d\d$/.test(xhr.status) && xhr.readyState===4) {
+                console.log(xhr.responseText);
+            }
+        }
         xhr.open('POST', '/post');
-        xhr.sned(fd);
+        xhr.send(fd);
     }
 
 </script>
