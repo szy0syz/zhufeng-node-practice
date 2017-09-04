@@ -23,9 +23,9 @@ var app = http.createServer(function (req, res) {
       var filename = fields.name;
       var total = Number(fields.total);
       var index = fields.index;
-      var size = fields.size;
+      var size = Number(fields.size);
+      var fileSize = Number(fields.fileSize);
       var tempDir = path.dirname(file.path);
-
       // 教程里这里创建可读流写一个新文件，太费性能了，改名就好了嘛
       // var src = fs.createReadStream()
       // 同步还是异步呢
@@ -34,21 +34,37 @@ var app = http.createServer(function (req, res) {
         if (renameCount === total - 1) {
           var fd = fs.openSync(filename, 'a');
           var files = fs.readdirSync(tempDir);
-          files.forEach(function (item, idx) {
+          files.forEach(function (item) {
             if (item.startsWith(filename + '.')) {
-              var pos = Number(path.extname(item).slice(1)) * size; // 不需要-1
+              // 计算二进制文件pos位置
+              var pos = Number(path.extname(item).slice(1)) * size;
               fs.readFile(tempDir + '/' + item, function (err, buff) {
+                if (err) {
+                  // 删除当前临时文件(以前的都已经清除了)
+                  fs.unlinkSync(tempDir + '/' + item);
+                  res.end('loaded err');
+                  return;
+                }
                 fs.writeSync(fd, buff, 0, buff.length, pos);
+                // 删除上传的临时文件
                 fs.unlinkSync(tempDir + '/' + item);
-                renameCount = 0;
+                // 哎 关不掉fd啊，怎么办！
+                // console.log(pos + size, fileSize);
+                // if ((pos + size) >= fileSize) {
+                //   console.log('关闭fd了~');
+                //   //fs.closeSync(fd);
+                // }
               });
             }
-          })
+          });
+          // 异步好坑。这里在循环外面关闭的话就成提前关闭fd了！不行！
+          // fs.closeSync(fd);
+          renameCount = 0;
         } else {
           renameCount++;
         }
       });
-      
+
       res.end('file ok');
     })
   } else {

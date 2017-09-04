@@ -119,7 +119,7 @@
                 fd.append('name', 'fileUpload'+ temp);
                 fd.append('total', shardCount);
                 fd.append('index', i); // 这里我不想+1
-                // fd.append('index', i + 1);
+                fd.append('fileSize', file.size);
                 fd.append('size', shardSize);
     
                 var xhr = new XMLHttpRequest();
