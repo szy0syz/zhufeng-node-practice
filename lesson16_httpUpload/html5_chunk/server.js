@@ -18,17 +18,17 @@ var app = http.createServer(function (req, res) {
       if (err) {
         res.end('file error');
       }
-      var file = files.fileUpload;
-      var filename = files.name;
-      var total = files.total;
-      var index = files.index;
-      var size = files.size;
-      // 教程里又读写一个新文件，太费性能了，改名就好了
+      var file = files.data;
+      var filename = fields.name;
+      var total = fields.total;
+      var index = fields.index;
+      var size = fields.size;
+      // 教程里这里创建可读流写一个新文件，太费性能了，改名就好了嘛
       // var src = fs.createReadStream()
-      console.log(path.basename(file.path));
-      fs.renameSync(file.path)
-
-
+      // 同步还是异步呢
+      fs.renameSync(file.path, file.path.replace(path.basename(file.path), filename + '.' + index));
+      //fs.rename(file.path, file.path.replace(path.basename(file.path), filename + '.' + index));
+      console.log(file.path);
 
 
 
