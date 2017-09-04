@@ -34,6 +34,20 @@
                     </tr>
                 </table>
             </div>
+            <div>
+                <table class="table table-striped">
+                    <tr>
+                        <td>传输速度</td>
+                        <td>当前进度</td>
+                        <td>剩余时间</td>
+                    </tr>
+                    <tr>
+                        <td id="speed"></td>
+                        <td id="stage"></td>
+                        <td id="remaining"></td>
+                    </tr>
+                </table>
+            </div>
             <div class="progress">
                 <div id="progressBar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
                 </div>
@@ -52,7 +66,7 @@
         }
     }
 
-    var progress = success = error = abort = function () { };
+    var success = error = abort = function () { };
 
     function progress(event) {
         var percent = Math.round(event.loaded* 100/event.total); // 计算上传进度
