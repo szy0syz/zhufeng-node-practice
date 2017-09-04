@@ -39,7 +39,7 @@
                     <tr>
                         <td>传输速度</td>
                         <td>当前进度</td>
-                        <td>剩余时间</td>
+                        <td>剩余量</td>
                     </tr>
                     <tr>
                         <td id="speed"></td>
@@ -77,12 +77,18 @@
     }
 
     var success = error = abort = function () { };
-
+    var last = 0;
     function progress(event) {
         var percent = Math.round(event.loaded * 100 / event.total); // 计算上传进度
         var pb = document.querySelector('#progressBar');
         pb.style.width = percent + '%';
         pb['aria-valuenow'] = percent;
+        var diff = Math.round(event.loaded - last);
+        last = event.loaded;
+        document.querySelector('#speed').innerHTML = changeSize(diff) + '/s';
+        document.querySelector('#stage').innerHTML = changeSize(event.loaded);
+        document.querySelector('#remaining').innerHTML = changeSize(event.total - event.loaded);
+
     }
 
     function uploadFile() {
@@ -93,7 +99,6 @@
         var fd = new FormData();
         fd.append('fileUpload', file);
         var xhr = new XMLHttpRequest();
-        //xhr.upload.onprogress = progress;
         xhr.upload.addEventListener('progress', progress, false); //上传进度监听
         xhr.addEventListener('load', success, false); //上传成功
         xhr.addEventListener('error', error, false); //上传出错
