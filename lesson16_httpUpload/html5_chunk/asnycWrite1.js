@@ -1,11 +1,15 @@
+/**
+ * 使用fs.write()方法写入文件
+ */
+
 var fs = require('fs');
 var path = require('path');
 process.chdir(__dirname);
 
-var fd = fs.openSync('jerry' + (new Date()).getMilliseconds() + '.txt', 'a');
+var fd = fs.openSync('jerry' + (Math.random() * 10000).toFixed() + '.txt', 'a');
 
 for (var i = 0; i < 3; i++) {
-  var buff = new Buffer('szy' + i);
+  var buff = new Buffer('szy' + i + '\r\n');
   var len = buff.length;
   var pos = i * len;
   console.log(buff, pos);
