@@ -7,7 +7,7 @@ var url = require('url');
 var fs = require('fs');
 var path = require('path');
 process.chdir(__dirname);
-var renameCount = 0; // 这里只能同时处理一个任务
+var renameCount = 0;
 var app = http.createServer(function (req, res) {
   var urlObj = url.parse(req.url, true); // 确定转换为对象方式
   var pathname = urlObj.pathname;
@@ -26,12 +26,14 @@ var app = http.createServer(function (req, res) {
       var size = Number(fields.size);
       var fileSize = Number(fields.fileSize);
       var tempDir = path.dirname(file.path);
-      var fd = fs.openSync(filename, 'a');
+      console.log(tempDir);
       // 教程里这里创建可读流写一个新文件，太费性能了，改名就好了嘛
-      // var src = fs.createReadStream();
+      // var src = fs.createReadStream()
+      // 同步还是异步呢
+      // fs.renameSync(file.path, file.path.replace(path.basename(file.path), filename + '.' + index));
       fs.rename(file.path, file.path.replace(path.basename(file.path), filename + '.' + index), function () {
         if (renameCount === total - 1) {
-          
+          var fd = fs.openSync(filename, 'a');
           var files = fs.readdirSync(tempDir);
           files.forEach(function (item) {
             if (item.startsWith(filename + '.')) {
@@ -45,15 +47,26 @@ var app = http.createServer(function (req, res) {
                   return;
                 }
                 fs.writeSync(fd, buff, 0, buff.length, pos);
-                renameCount--;
+                // fs.write(fd, buff, 0, buff.length, pos, function(err, written, string) {
+                //   consoel.log(written, string);
+                //   fs.unlinkSync(tempDir + '/' + item);
+                // });
                 // 删除上传的临时文件
                 fs.unlinkSync(tempDir + '/' + item);
-                if (renameCount === 0) {
-                  fs.closeSync(fd);
-                }
+                // 哎 关不掉fd啊，怎么办！
+                // console.log(pos + size, fileSize);
+                // if ((pos + size) >= fileSize) {
+                //   console.log('关闭fd了~');
+                //   //fs.closeSync(fd);
+                // }
+                // 暂时监听下写入文件这个可写流的close事件，看是不是全部写完后close，这样的可写流一般都是带autoClose属性的！
+                // 这坑爹的this，不是可写流而是fs实例
+                //console.log(this);
               });
             }
           });
+          // 异步好坑。这里在循环外面关闭的话就成提前关闭fd了！不行！
+          // fs.closeSync(fd);
           renameCount = 0;
         } else {
           renameCount++;
