@@ -26,6 +26,7 @@ var app = http.createServer(function (req, res) {
       var size = Number(fields.size);
       var fileSize = Number(fields.fileSize);
       var tempDir = path.dirname(file.path);
+      console.log(tempDir);
       // 教程里这里创建可读流写一个新文件，太费性能了，改名就好了嘛
       // var src = fs.createReadStream()
       // 同步还是异步呢
@@ -46,6 +47,10 @@ var app = http.createServer(function (req, res) {
                   return;
                 }
                 fs.writeSync(fd, buff, 0, buff.length, pos);
+                // fs.write(fd, buff, 0, buff.length, pos, function(err, written, string) {
+                //   consoel.log(written, string);
+                //   fs.unlinkSync(tempDir + '/' + item);
+                // });
                 // 删除上传的临时文件
                 fs.unlinkSync(tempDir + '/' + item);
                 // 哎 关不掉fd啊，怎么办！
@@ -54,6 +59,9 @@ var app = http.createServer(function (req, res) {
                 //   console.log('关闭fd了~');
                 //   //fs.closeSync(fd);
                 // }
+                // 暂时监听下写入文件这个可写流的close事件，看是不是全部写完后close，这样的可写流一般都是带autoClose属性的！
+                // 这坑爹的this，不是可写流而是fs实例
+                //console.log(this);
               });
             }
           });
