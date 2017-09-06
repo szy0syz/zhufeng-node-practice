@@ -17,6 +17,7 @@ app.use(function (req, res, next) {
   // 为方便使用者在req中添加两个属性
   req.path = pathname;
   req.query = query;
+  next();
 });
 
 app.use(function (req, res, next) {
@@ -25,13 +26,14 @@ app.use(function (req, res, next) {
     res.writeHead(200, { 'Content-Type': 'text/html;charset=utf-8' });
     res.end(data);
   }
+  next();
 });
 
 app.use(function(req, res) {
-  if (req.pathname === '/') {
+  if (req.path === '/') {
     res.send('<ul><li><a href="/article?id=1">第一篇</a></li><li><a href="/article?id=2">第二篇</a></li><li><a href="/article?id=3">第三篇</a></li></ul>');
-  } else if (req.pathname === '/article') {
-    res.send(articles[query.id]);
+  } else if (req.path === '/article') {
+    res.send(articles[req.query.id]);
   } else {
     res.end('404');
   }
