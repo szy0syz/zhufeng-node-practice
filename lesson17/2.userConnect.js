@@ -1,6 +1,3 @@
-var http = require('http');
-var path = require('path');
-var querystring = require('querystring');
 var connect = require('./2.connect');
 
 var app = connect();
