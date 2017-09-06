@@ -1,0 +1,9 @@
+<ul>
+    <% for(var i=0; i < data.articles.length; i++) { %>
+        <li>
+            <a href="/article?id=<%= data.articles[i].id %>">
+                <%= data.articles[i].title %>
+            </a>
+        </li>
+    <% } %>
+</ul>

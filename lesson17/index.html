@@ -4,12 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Index</title>
 </head>
 
 <body>
     <div>
-        <ul><li><a href="/article?id=1">第一篇</a></li><li><a href="/article?id=2">第二篇</a></li><li><a href="/article?id=3">第三篇</a></li></ul>
+        <ul>
+            <li><a href="/article?id=1">第一篇</a></li>
+            <li><a href="/article?id=2">第二篇</a></li>
+            <li><a href="/article?id=3">第三篇</a></li>
+        </ul>
+        <!-- <ul>
+            <% for(var i=0; i < data.articles.length; i++) %>
+                <li>
+                    <a href="/article?id=<%= data.articles[i].id %>">
+                        <%= data.articles[i].title %>
+                    </a>
+                </li>
+            <% } %>
+        </ul> -->
     </div>
 </body>
 
