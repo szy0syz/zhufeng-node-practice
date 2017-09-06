@@ -8,22 +8,26 @@ var articles = {
   3: '第三篇文章的详情'
 }
 
-http.createServer(function(req, res) {
+http.createServer(function (req, res) {
   var urlObj = url.parse(req.url, true);
   var pathname = urlObj.pathname;
   var query = urlObj.query;
 
-  if(pathname === '/') {
-    res.writeHead(200, {'Content-Type': 'text/html;charset=utf-8'});
-    res.end('<ul><li><a href="/article?id=1">第一篇</a></li><li><a href="/article?id=2">第二篇</a></li><li><a href="/article?id=3">第三篇</a></li></ul>');
+  if (pathname === '/') {
+    send('<ul><li><a href="/article?id=1">第一篇</a></li><li><a href="/article?id=2">第二篇</a></li><li><a href="/article?id=3">第三篇</a></li></ul>');
   } else if (pathname === '/article') {
-    res.writeHead(200, {'Content-Type': 'text/html;charset=utf-8'});
-    res.end(articles[query.id]);
+    send(articles[query.id]);
   } else {
     res.end('404');
   }
 
-}).listen(8080, function() {
+  // 公共的业务逻辑
+  function send(data) {
+    res.writeHead(200, { 'Content-Type': 'text/html;charset=utf-8' });
+    res.end(data);
+  }
+
+}).listen(8080, function () {
   console.log('server is running...');
 });
 
