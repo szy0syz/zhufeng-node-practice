@@ -23,8 +23,6 @@ app.use(function(req, res) {
   }
 })
 
-var server = http.createServer(app);
-
-server.listen(8080, function () {
-  console.log('server is running...');
-});
+app.listen(8080, function() {
+  console.log('server in running at %d port.' ,8080);
+})
