@@ -1,5 +1,5 @@
 var http = require('http');
-var url = require('url');
+// var url = require('url');
 var path = require('path');
 var querystring = require('querystring');
 var connect = require('./2.connect');
@@ -10,24 +10,8 @@ var articles = {
 }
 
 var app = connect();
-app.use(function (req, res, next) {
-  var urlObj = url.parse(req.url, true);
-  var pathname = urlObj.pathname;
-  var query = urlObj.query;
-  // 为方便使用者在req中添加两个属性
-  req.path = pathname;
-  req.query = query;
-  next();
-});
+require('./2.middle')(app);
 
-app.use(function (req, res, next) {
-  // 给res添加一个业务方法
-  res.send = function (data) {
-    res.writeHead(200, { 'Content-Type': 'text/html;charset=utf-8' });
-    res.end(data);
-  }
-  next();
-});
 
 app.use(function(req, res) {
   if (req.path === '/') {
