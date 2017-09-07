@@ -18,8 +18,6 @@ module.exports = function (app) {
     }
   ]
   ////////////
-  var fs = require('fs');
-  process.chdir(__dirname);
 
   app.use('/list', function (req, res) {
     res.render('./index.szy', { articles: articles })

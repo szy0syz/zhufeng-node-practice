@@ -1,4 +1,5 @@
 var fs = require('fs');
+process.chdir(__dirname);
 
 module.exports = function redner(app) {
   app.use(function(req, res, next) {
