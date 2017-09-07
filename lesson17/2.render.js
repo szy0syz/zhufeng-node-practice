@@ -8,7 +8,7 @@ module.exports = function redner(app) {
         res.send(compile(str, obj));
       });
     }
-    next(); // 继续下一个中间件
+    next(); // 继续配置下一个中间件(并非调用阶段)
   });
 }
 

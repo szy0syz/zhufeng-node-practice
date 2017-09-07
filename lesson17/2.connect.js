@@ -17,7 +17,7 @@ proto.use = function (route, fn) {
   var handle = fn;
   var path = route;
   // 如果第一个参数不是字符串，那么可能是函数。
-  // 那就说明没传路由，直接传业务操作函数
+  // 那就说明没传路由，直接传业务操作函数，其实就是404操作之类的
   if (typeof route !== 'string') {
     // 那么就让第一个参数等于handle
     handle = route;
@@ -36,6 +36,7 @@ proto.handle = function (req, res) {
     var handle = layer.handle;
 
     var path = url.parse(req.url).pathname;
+    // route = url.parse(route).pathname;
     // 这里只能startWith，因为还有查询参数之类的
     // 但有个问题，如果是访问根目录/，则所有都匹配上了
     if (path.startsWith(route)) {
@@ -54,10 +55,13 @@ proto.listen = function (port, callback) {
 
 // 还是用url模块吧
 function routeMatch(path, route) {
-  if (path === route.slice(1,1)) {
+  if (path === route) {
     return true;
-  } else if (path.slice(1))
-
+  } else if (path.slice(1) === (route.slice(1))) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 module.exports = createServer;
