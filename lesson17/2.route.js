@@ -19,6 +19,10 @@ module.exports = function (app) {
   ]
   ////////////
 
+  // app.use('/', function (req, res) {
+  //   res.render('./index.szy', { articles: articles })
+  // })
+
   app.use('/list', function (req, res) {
     res.render('./index.szy', { articles: articles })
   })
