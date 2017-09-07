@@ -52,4 +52,12 @@ proto.listen = function (port, callback) {
   server.listen(port, callback); // app.listen(8080) -> this == app
 }
 
+// 还是用url模块吧
+function routeMatch(path, route) {
+  if (path === route.slice(1,1)) {
+    return true;
+  } else if (path.slice(1))
+
+}
+
 module.exports = createServer;
