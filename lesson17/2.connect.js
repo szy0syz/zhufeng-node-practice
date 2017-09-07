@@ -28,6 +28,16 @@ proto.use = function (route, fn) {
 }
 
 proto.handle = function (req, res) {
+  // 就目前而言stack数组里有这些东西
+  // [
+  //   { 'path': '/', 'handle': '给req上添加query等共有属性的中间件' },
+  //   { 'path': '/', 'handle': '给res添加send方法的中间件' },
+  //   { 'path': '/', 'handle': '给res添加render方法的中间件' },
+  //   { 'path': '/list', 'handle': '路由'},
+  //   { 'path': '/article', 'handle': '路由'},
+  //   { 'path': '/', 'handle': '最终404路由'},
+  // ]
+  // 每一个请求，都会进该函数一次，然后递归调用上面这6个中间件
   var stack = this.stack;
   var index = 0;
   function next() {
