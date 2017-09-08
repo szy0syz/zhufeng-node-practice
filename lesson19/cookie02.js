@@ -6,9 +6,9 @@ var app = express();
 
 // app.use(cookieParser());
 app.use(function (req, res, next) {
-  // parse()参数说明: 第二个参数 对象之间分隔符为分号+空格，键值对之间的分隔符为等号
-  req.cookies = querystring.parse(req.headers.cookies, '; ', '=');
-  req.cookie = cookie;
+  console.log(req.headers.cookie);
+  req.cookies = querystring.parse(req.headers.cookie, '; ', '=');
+  res.myCookie = myCookie;
   next();
 });
 
@@ -16,12 +16,21 @@ app.get('/', function (req, res) {
   if (req.cookies.visited) {
     res.send('欢迎老朋友');
   } else {
-    res.cookie('visited', 1, { maxAge: 10 * 60 * 1000 });
+    res.myCookie('visited', 1, { path: '/', expires: new Date(Date.now() + 5000) });
     res.send('欢迎新朋友');
   }
 });
 
-function cookie(name, val, options) {
+app.get('/a', function (req, res) {
+  if (req.cookies.visited) {
+    res.send('欢迎老朋友');
+  } else {
+    res.cookie('visited', 1, { path: '/a', expires: new Date(Date.now() + 4000) });
+    res.send('欢迎新朋友');
+  }
+});
+
+function myCookie(name, val, options) {
   var opts = options || {};
   var parts = [name + '=' + val];
   if (opts.maxAge) {
@@ -37,12 +46,15 @@ function cookie(name, val, options) {
     parts.push('Expires=' + opts.expires.toUTCString());
   }
   if (opts.httpOnly) {
-    parts.push('HttpOnly'); // 值有键
+    parts.push('HttpOnly');
   }
   if (opts.secure) {
-    parts.push('Secure'); // 值有键
+    parts.push('Secure');
   }
-  return parts.join('; ');
+  // 图方便调用哈express封装的额方法
+  this.append('Set-Cookie', parts.join('; '));
+
+  return this;
 }
 
 app.listen(8080);
