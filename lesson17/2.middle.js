@@ -1,5 +1,6 @@
-var url = require('url');
+"use strict";
 
+var url = require('url');
 module.exports = function (app) {
     app.use(function (req, res, next) {
         var urlObj = url.parse(req.url, true);
