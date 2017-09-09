@@ -29,18 +29,30 @@ app.get('/', function (req, res) {
 app.listen(8080);
 
 //手写Express session中间件
-function mySession() {
+function mySession(options) {
   var data = {};
+  options = Object.assign({
+    rolling: false,
+    resave: true,
+    genid: uuid,
+    name: 'connect.sid',
+    cookie: { maxAge: 60 * 60 * 1000 },
+    saveUninitialized: true
+  }, options);
   // 要返回中间件格式的函数
   return function (req, res, next) {
-    var id = req.cookies['connect.sid'] || uuid();
-    res.cookie('connect.sid', id, {
-      maxAge: 10 * 1000
-    });
+    // 如果选项中有自定义id生成函数就用，没有就用uuid/v4
+    var id = req.cookies[options.name] || options.genid();
+    if (options.resave) {
+      res.cookie(options.name, id, options.cookie);
+    }
     req.session = data[id] || {};
     // 当响应结束时，要把在处理函数中修改的session保存回data里
-    res.on('finish', function() {
-      data[id] = req.session;
+    res.on('finish', function () {
+      // 仅当res.session有属性或saveUninitialized为true
+      if (Object.keys(req.session) > 0 || options.saveUninitialized) {
+        data[id] = req.session;
+      }
     });
     next();
   }
