@@ -9,10 +9,10 @@ app.use(session({
   cookie: { maxAge: 60 * 1000 * 30 },
   resave: true,
   saveUninitialized: true,
-  store: new FileStore()
+  store: new FileStore({ dir: './sessions' })
 }));
 
-app.get('/', function(req, res) {
+app.get('/', function (req, res) {
   if (req.session.sign) {
     req.session.count = req.session.count + 1;
     res.send('welcome <strong>' + req.session.name + '</strong>, 欢迎你第' + req.session.count + '次登陆。');
