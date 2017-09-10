@@ -7,12 +7,6 @@ var app = express();
 
 app.use(cookieParser());
 app.use(mySession());
-// app.use(session({
-//   secret: 'szy20170909',
-//   cookie: { maxAge: 60 * 1000 * 30 },
-//   resave: true,
-//   saveUninitialized: true
-// }));
 
 app.get('/', function (req, res) {
   if (req.session.sign) {

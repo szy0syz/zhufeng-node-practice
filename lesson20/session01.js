@@ -1,10 +1,8 @@
 var express = require('express');
-var cookieParser = require('cookie-parser');
 var session = require('express-session');
 
 var app = express();
 
-app.use(cookieParser());
 app.use(session({
   secret: 'szy20170909',
   cookie: { maxAge: 60 * 1000 * 30 },
