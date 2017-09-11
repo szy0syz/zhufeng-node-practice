@@ -12,7 +12,6 @@ var http = require('http');
  * 1. 
  */
 function send(filename,req, res) {
-  console.log(req.headers['if-modified-since']);
   // 取得文件最后修改时间
   var lastModifiedSince = new Date(req.headers['if-modified-since']); // 注意，服务端取键名要全小写！
   fs.stat(filename, function(err, stat) {
