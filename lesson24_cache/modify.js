@@ -4,12 +4,9 @@ process.chdir(__dirname);
 var http = require('http');
 
 /**
- * 
  * @param {string} filename 
  * @param {IncomingMessage} req 
  * @param {stream} res 
- * 
- * 1. 
  */
 function send(filename,req, res) {
   // 取得文件最后修改时间

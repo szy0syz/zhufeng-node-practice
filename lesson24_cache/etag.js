@@ -1,20 +1,18 @@
 var fs = require('fs');
+var http = require('http');
 var crypto = require('crypto');
 var express = require('express');
+
 process.chdir(__dirname);
-var http = require('http');
 
 function getHash(str) {
   var shasum = crypto.createHash('sha1');
   return shasum.update(str).digest('base64');
 }
 /**
- * 
  * @param {string} filename 
  * @param {IncomingMessage} req 
  * @param {stream} res 
- * 
- * 1. 
  */
 function send(filename, req, res) {
   // 取得文件最后修改时间
@@ -26,21 +24,10 @@ function send(filename, req, res) {
       res.statusCode = 304;
       res.end();
     } else {
-      res.writeHead(200, { 'Etag': sha1 , 'Cache-Control': 'max-age=3600'});
+      res.writeHead(200, { 'Etag': sha1, 'Cache-Control': 'max-age=3600' });
       fs.createReadStream(filename).pipe(res);
     }
   })
-
-  // fs.stat(filename, function(err, stat) {
-  //   if(stat.mtime === ifNoneMAtch) {
-  //     // res.sendStatus(304).end(); // 又不是express
-  //     res.statusCode = 304;
-  //     res.end();
-  //   } else {
-  //     res.writeHead(200, {'If-None-Match': stat.mtime.toGMTString()});
-  //     fs.createReadStream(filename).pipe(res);
-  //   }
-  // })
 }
 
 http.createServer(function (req, res) {
