@@ -26,7 +26,7 @@ function send(filename, req, res) {
       res.statusCode = 304;
       res.end();
     } else {
-      res.writeHead(200, { 'If-None-Match': sha1 , 'Cache-Control': 'max-age=3600'});
+      res.writeHead(200, { 'Etag': sha1 , 'Cache-Control': 'max-age=3600'});
       fs.createReadStream(filename).pipe(res);
     }
   })
