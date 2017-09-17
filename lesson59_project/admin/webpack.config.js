@@ -10,7 +10,36 @@ module.exports = {
   resolve: { // 解析配置
     root: ['./src'], //设置项目webpack解析的起始根据路为src文件夹开始,如果webpack找模块只会去src里去找
     extensions: ['', 'js', 'css'] //webpack后缀解析，如果没加js或css会自动识别
-
-
-  }
+  },
+  module: {
+    rules: [
+      {
+        test: /\.jade$/,
+        loader: 'jade',
+        exclude: /node_modules/
+      },
+      {
+        test: /\.css$/,
+        loader: "style!css",
+        exclude: /node_modules/
+      },
+      {
+        loader: 'babel-loader',
+        exclude: /node_modules/,
+        test: /\.js?$/,
+        query: {
+          presets: ['es2015'],
+        },
+      },
+      {
+        test: /\.less$/,
+        exclude: /node_modules/,
+        loader: "style!css!less?strictMath&noIeCompat"
+      },
+      { test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=10000&mimetype=application/font-woff' },
+      { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=10000&mimetype=application/octet-stream' },
+      { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: 'file' },
+      { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=10000&mimetype=image/svg+xml' }
+    ]
+  },
 }
